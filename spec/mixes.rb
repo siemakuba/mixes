@@ -1,4 +1,4 @@
-require 'include_with_config'
+require 'mixes'
 
 module FooBar
   def foobar_instance_method
@@ -22,11 +22,11 @@ module FooBar
 end
 
 class FooClass
-  mixin ::FooBar, name: :foo, value: :FOO
+  mixes ::FooBar, name: :foo, value: :FOO
 end
 
 class BarClass
-  mixin ::FooBar, name: :bar, value: :BAR
+  mixes ::FooBar, name: :bar, value: :BAR
 end
 
 describe "mixed_with" do

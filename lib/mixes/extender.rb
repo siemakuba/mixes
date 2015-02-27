@@ -1,4 +1,4 @@
-module IncludeWithConfig
+module Mixes
   module Extender
     def perform(target, source)
       target.send(:include, source)

@@ -1,7 +1,7 @@
-module IncludeWithConfig
+module Mixes
   module Configurator
     def perform(source, config)
-      source.send(:extend, ::IncludeWithConfig::Configurator::Extension)
+      source.send(:extend, ::Mixes::Configurator::Extension)
       source.mixin_configuration = config
     end
     module_function :perform

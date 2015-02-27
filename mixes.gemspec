@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'include_with_config/version'
+require 'mixes/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "include_with_config"
-  spec.version       = IncludeWithConfig::VERSION
+  spec.name          = "mixes"
+  spec.version       = Mixes::VERSION
   spec.authors       = ["Kuba Łopusiński"]
   spec.email         = ["siemakuba@gmail.com"]
   spec.summary       = %q{Load a Mixin with initial configuration.}
@@ -19,6 +19,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.7"
-  spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.2"
 end
