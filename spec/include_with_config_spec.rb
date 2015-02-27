@@ -1,48 +1,66 @@
 require 'include_with_config'
 
-module Foo
-  def foo_instance_method
-    __method__
+module FooBar
+  def foobar_instance_method
   end
 
   def self.included(base)
-    base.const_set('MIXIN_CONFIG', mixin_configuration)
+    new_method_name   = mixin_configuration[:name]
+    new_method_value  = mixin_configuration[:value]
+
+    base.instance_eval do
+      define_method(new_method_name) do
+        new_method_value
+      end
+    end
   end
 
   module ClassMethods
-    def foo_class_method
-      __method__
+    def foobar_class_method
     end
   end
 end
 
-class ClassWithMixin
-  mixin ::Foo, :passed_config_value
+class FooClass
+  mixin ::FooBar, name: :foo, value: :FOO
 end
 
-class AnotherClassWithMixin
-  mixin ::Foo, :another_passed_config_value
+class BarClass
+  mixin ::FooBar, name: :bar, value: :BAR
 end
 
-describe ClassWithMixin do
-  context 'Class level' do
-    specify {
-      expect(described_class.included_modules).to include(Foo)
-    }
+describe "mixed_with" do
+  context "on class level" do
+    it "includes FooBar module" do
+      expect(FooClass.included_modules).to include(FooBar)
+      expect(BarClass.included_modules).to include(FooBar)
+    end
 
-    specify {
-      expect(described_class.foo_class_method).to eql(:foo_class_method)
-    }
-
-    specify {
-      expect(ClassWithMixin.const_get('MIXIN_CONFIG')).to eql(:passed_config_value)
-      expect(AnotherClassWithMixin.const_get('MIXIN_CONFIG')).to eql(:another_passed_config_value)
-    }
+    it "extends FooBar::ClassMethods" do
+      expect(FooClass.methods(true)).to include(:foobar_class_method)
+      expect(BarClass.methods(true)).to include(:foobar_class_method)
+    end
   end
 
-  context 'instance level' do
-    specify {
-      expect(subject.foo_instance_method).to eql(:foo_instance_method)
-    }
+  context "on instance level" do
+    subject(:foo_object) { FooClass.new }
+    subject(:bar_object) { BarClass.new }
+
+    it "includes FooBar module methods" do
+      expect(foo_object.methods(true)).to include(:foobar_instance_method)
+      expect(bar_object.methods(true)).to include(:foobar_instance_method)
+    end
+
+    context "defineds methods on host objects based on passed configuration" do
+      it "for FooClass instances" do
+        expect(foo_object.foo).to eql(:FOO)
+        expect{foo_object.bar}.to raise_error(NoMethodError)
+      end
+
+      it "for BarClass instances" do
+        expect(bar_object.bar).to eql(:BAR)
+        expect{bar_object.foo}.to raise_error(NoMethodError)
+      end
+    end
   end
 end
