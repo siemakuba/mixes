@@ -5,12 +5,11 @@ module FooBar
   end
 
   def self.included(base)
-    new_method_name   = mixin_configuration[:name]
-    new_method_value  = mixin_configuration[:value]
+    config = mixin_configuration
 
     base.instance_eval do
-      define_method(new_method_name) do
-        new_method_value
+      define_method(:passed_configuration) do
+        config
       end
     end
   end
@@ -22,11 +21,11 @@ module FooBar
 end
 
 class FooClass
-  mixes ::FooBar, name: :foo, value: :FOO
+  mixes ::FooBar, :foo_config
 end
 
 class BarClass
-  mixes ::FooBar, name: :bar, value: :BAR
+  mixes ::FooBar, :bar_config
 end
 
 describe "mixed_with" do
@@ -51,16 +50,9 @@ describe "mixed_with" do
       expect(bar_object.methods(true)).to include(:foobar_instance_method)
     end
 
-    context "defineds methods on host objects based on passed configuration" do
-      it "for FooClass instances" do
-        expect(foo_object.foo).to eql(:FOO)
-        expect{foo_object.bar}.to raise_error(NoMethodError)
-      end
-
-      it "for BarClass instances" do
-        expect(bar_object.bar).to eql(:BAR)
-        expect{bar_object.foo}.to raise_error(NoMethodError)
-      end
+    it "passes configuration for each inclusion" do
+      expect(foo_object.passed_configuration).to eql(:foo_config)
+      expect(bar_object.passed_configuration).to eql(:bar_config)
     end
   end
 end
