@@ -20,30 +20,35 @@ module FooBar
   end
 end
 
-class FooClass
-  mixes ::FooBar, :foo_config
-end
-
-class BarClass
-  mixes ::FooBar, :bar_config
-end
 
 describe "mixed_with" do
+  let(:foo_class) do
+    Class.new do
+      mixes ::FooBar, :foo_config
+    end
+  end
+
+  let(:bar_class) do
+    Class.new do
+      mixes ::FooBar, :bar_config
+    end
+  end
+
   context "on class level" do
     it "includes FooBar module" do
-      expect(FooClass.included_modules).to include(FooBar)
-      expect(BarClass.included_modules).to include(FooBar)
+      expect(foo_class.included_modules).to include(FooBar)
+      expect(bar_class.included_modules).to include(FooBar)
     end
 
     it "extends FooBar::ClassMethods" do
-      expect(FooClass.methods(true)).to include(:foobar_class_method)
-      expect(BarClass.methods(true)).to include(:foobar_class_method)
+      expect(foo_class.methods(true)).to include(:foobar_class_method)
+      expect(bar_class.methods(true)).to include(:foobar_class_method)
     end
   end
 
   context "on instance level" do
-    subject(:foo_object) { FooClass.new }
-    subject(:bar_object) { BarClass.new }
+    subject(:foo_object) { foo_class.new }
+    subject(:bar_object) { bar_class.new }
 
     it "includes FooBar module methods" do
       expect(foo_object.methods(true)).to include(:foobar_instance_method)
