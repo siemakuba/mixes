@@ -23,7 +23,7 @@ Or install it yourself as:
 ## Usage
 ### Plain object extending
 
-Include you're module inside any Ruby object using the `mixes` syntax:
+Include your module inside any Ruby object using the `mixes` syntax:
 
 ```ruby
 module FooModule
