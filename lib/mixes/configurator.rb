@@ -1,6 +1,6 @@
 module Mixes
   module Configurator
-    def perform(source, config)
+    def perform(source, config = nil)
       source.send(:extend, ::Mixes::Configurator::Extension)
       source.mixin_configuration = config
     end
