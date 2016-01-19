@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["siemakuba@gmail.com"]
   spec.summary       = %q{Load a Mixin with initial configuration.}
   spec.description   = ""
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/siemakuba/mixes"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
