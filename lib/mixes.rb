@@ -1,6 +1,6 @@
-require "mixes/version"
-require "mixes/configurator"
-require "mixes/extender"
+require_relative "mixes/version"
+require_relative "mixes/configurator"
+require_relative "mixes/extender"
 
 module Mixes
   def mixes(mixed_module, *config)

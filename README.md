@@ -4,8 +4,6 @@ Simple Ruby objects mixin, with configuration.
 
 ## Installation
 
-__Not available yet__
-
 Add this line to your application's Gemfile:
 
 ```ruby
